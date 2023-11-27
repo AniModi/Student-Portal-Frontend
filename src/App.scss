@@ -1,0 +1,22 @@
+.app_top {
+    height: var(--header-footer-height);
+    width: 100%;
+    background-color: #0452A3;
+    border-bottom-right-radius: 2rem;
+    border-bottom-left-radius: 2rem;
+}
+
+.app_body {
+    height: calc(100vh - 2 * var(--header-footer-height));
+    width: 100%;
+    background-color: #F5F5F5;
+    overflow-y: auto;
+}
+
+.app_bottom {
+    height: var(--header-footer-height);
+    width: 100%;
+    background-color: #0452A3;
+    border-top-right-radius: 2rem;
+    border-top-left-radius: 2rem;
+}

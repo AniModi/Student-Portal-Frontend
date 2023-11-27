@@ -1,0 +1,76 @@
+.login_page_container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__login_box {
+    width: 25%;
+    height: 90%;
+    background-color: #bff1ec;
+    border-radius: 30px;
+    border: 2px solid #0452a3;
+
+    &__logo_container {
+      width: 100%;
+      height: 40%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      & img {
+        height: 70%;
+      }
+    }
+    &__inputs {
+      width: 100%;
+      height: 30%;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+
+      &__input {
+        width: 90%;
+        height: 50%;
+      }
+    }
+    &__forgot_password_container {
+      width: 100%;
+      height: 10%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      & a {
+        width: 90%;
+        text-decoration: none;
+        color: black;
+      }
+    }
+    &__login_button_container {
+      width: 100%;
+      height: 20%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      & button {
+        width: 40%;
+        height: 40%;
+        border-radius: 10px;
+        border: 2px solid #0452a3;
+        background-color: #0452a3;
+        color: white;
+        font-size: 1.25rem;
+        font-weight: bold;
+        &:hover {
+          background-color: white;
+          color: #0452a3;
+        }
+      }
+    }
+  }
+}
+
+.login_page_container__login_box__inputs__input.password {
+  position: relative;
+}
+
