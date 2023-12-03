@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { FaCalendarAlt, FaUser, FaWpforms } from "react-icons/fa";
-import { MdLock } from "react-icons/md";
+import "./FeesVerificationForm.scss";
 import Input from "../components/Input";
-import { FaGraduationCap } from "react-icons/fa";
-import { CiMemoPad } from "react-icons/ci";
-import "./SemesterRegistration.scss";
+import {
+  FaCalendarAlt,
+  FaReceipt,
+  FaUser,
+  FaWpforms,
+} from "react-icons/fa";
 
-export default function SemesterRegistration() {
-  const [registrationData, setRegistrationData] = useState({});
+export default function FeesVerificationForm() {
+  const [verificationData, setVerificationData] = useState({});
   const [invalidPassword, setInvalidPassword] = useState(false);
 
   const formFields = [
@@ -16,65 +18,65 @@ export default function SemesterRegistration() {
       name: "Batch",
       type: "text",
       placeholder: "Batch",
-      icon : <FaCalendarAlt />
+      icon: <FaCalendarAlt />,
     },
     {
       label: "Student ID",
       name: "Student ID",
       type: "text",
       placeholder: "Student ID",
-      icon : <FaUser />
+      icon: <FaUser />,
     },
     {
       label: "Semester",
       name: "Semester",
       type: "text",
       placeholder: "Semester",
-      icon : <FaWpforms />
+      icon: <FaWpforms />,
     },
     {
-      label: "Registration Form",
-      name: "Registration Form",
-      type: "File",
-      placeholder: "Registration Form",
-      icon : <CiMemoPad />
-    },
-    {
-      label: "Result",
-      name: "Result",
+      label: "Payment Proof (Institute)",
+      name: "Payment Proof (Institute)",
       type: "text",
-      placeholder: "Result",
-      icon : <FaGraduationCap />
+      placeholder: "Payment Proof (Institute)",
+      icon: <FaReceipt />,
     },
     {
-      label: "No Dues Certificate",
-      name: "No Dues Certificate",
+      label: "Payment Proof (Hostel)",
+      name: "Payment Proof (Hostel)",
       type: "text",
-      placeholder: "No Dues Certificate",
-      icon : <MdLock />
+      placeholder: "Payment Proof (Hostel)",
+      icon: <FaReceipt />,
+    },
+    {
+      label: "Payment Proof (Mess)",
+      name: "Payment Proof (Mess)",
+      type: "text",
+      placeholder: "Payment Proof (Mess)",
+      icon: <FaReceipt />,
     },
   ];
 
-  const handleRegistrationData = (e) => {
+  const handleVerificationData = (e) => {
     if (e.target.type === "file") {
-      setRegistrationData({
-        ...registrationData,
+      setVerificationData({
+        ...verificationData,
         [e.target.name]: e.target.files,
       });
       return;
     }
-    setRegistrationData({
-      ...registrationData,
+    setVerificationData({
+      ...verificationData,
       [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(registrationData);
+    console.log(verificationData);
     if (
-      registrationData.Username === "validUsername" &&
-      registrationData.Password === "validPassword"
+      verificationData.Username === "validUsername" &&
+      verificationData.Password === "validPassword"
     ) {
       console.log("Login successful");
       setInvalidPassword(false);
@@ -94,21 +96,21 @@ export default function SemesterRegistration() {
 
   const isSubmitDisabled = false;
   return (
-    <div className="student_registration_container">
-      <div className="student_registration_container__registration_box">
-        <div className="student_registration_container__registration_box__title">
-          Registration
+    <div className="fees_verification_form_container">
+      <div className="fees_verification_form_container__verification_box">
+        <div className="fees_verification_form_container__verification_box__title">
+          Verify Fees
         </div>
-        <div className="student_registration_container__registration_box__inputs">
+        <div className="fees_verification_form_container__verification_box__inputs">
           {formFields.map((field) => {
             return (
-              <div className="student_registration_container__registration_box__inputs__input">
+              <div className="fees_verification_form_container__verification_box__inputs__input">
                 <Input
                   label={field.label}
                   name={field.name}
                   type={field.type}
                   placeholder={field.placeholder}
-                  onChange={handleRegistrationData}
+                  onChange={handleVerificationData}
                   inputClass={invalidPassword ? "invalid" : ""}
                   genClass={invalidPassword ? "shake" : ""}
                 >
@@ -118,7 +120,7 @@ export default function SemesterRegistration() {
             );
           })}
         </div>
-        <div className="student_registration_container__registration_box__registration_button_container">
+        <div className="fees_verification_form_container__verification_box__verification_button_container">
           <button
             onClick={handleSubmit}
             disabled={isSubmitDisabled}

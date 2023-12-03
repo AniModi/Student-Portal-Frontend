@@ -1,0 +1,51 @@
+// Pagination.scss
+
+.pagination_container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f2f2f2;
+  
+    &__rows_selected {
+      font-size: 14px;
+      color: #666;
+    }
+  
+    &__pagination {
+      display: flex;
+      align-items: center;
+  
+      &__first_page,
+      &__previous_button,
+      &__next_button,
+      &__last_page,
+      &__page_number {
+        cursor: pointer;
+        padding: 5px;
+        margin: 0 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #fff;
+        color: #333;
+        font-weight: bold;
+  
+        &:hover {
+          background-color: #e6e6e6;
+        }
+      }
+  
+      &__first_page,
+      &__last_page {
+        margin-right: 15px;
+      }
+  
+      &__page_number {
+        &.active {
+          background-color: #0452A3;
+          color: white;
+        }
+      }
+    }
+  }
+  
