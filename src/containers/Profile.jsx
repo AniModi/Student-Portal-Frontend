@@ -47,9 +47,9 @@ export default function Profile() {
               Change Password
             </button>
             <button className="profile_container__info_container__buttons__button" onClick={() => {
-              navigate();
+              navigate('/change-wallet-address');
             }}>
-              Go to Dashboard
+              Change Wallet Address
             </button>
           </div>
         </div>

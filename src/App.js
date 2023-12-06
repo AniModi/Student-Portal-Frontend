@@ -20,6 +20,7 @@ import { FaArrowLeft, FaSignOutAlt } from "react-icons/fa";
 import FacultyList from "./containers/FacultyList";
 import FacultyStudentDetails from "./containers/FacultyStudentDetails";
 import AcademicsResultUpload from "./containers/AcademicsResultUpload";
+import ChangeWalletAddress from "./containers/ChangeWalletAddress";
 
 const routes = [
   { path: "/", element: <Login /> },
@@ -33,6 +34,7 @@ const routes = [
   { path: "/student/home", element: <Home /> },
   { path: "/student/profile", element: <Profile /> },
   { path: "/change-password", element: <ChangePassword /> },
+  { path: "/change-wallet-address", element: <ChangeWalletAddress /> },
   { path: "/student/select-document", element: <DocumentSelectionPage /> },
   { path: "/student/select-document/:id", element: <DownloadDocumentPage /> },
   { path: "/finance/home", element: <FinanceDepartmentHome /> },
