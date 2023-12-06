@@ -9,7 +9,14 @@ import axios from "axios";
 import { uploadToIPFS } from "../uploadToPinata";
 
 export default function SemesterRegistration() {
-  const [registrationData, setRegistrationData] = useState({});
+  const [registrationData, setRegistrationData] = useState({
+    batch: "",
+    username: "",
+    semester: "",
+    registrationForm: "",
+    result: "Not Published",
+    noDueCertificates: "Not Verified",
+  });
 
   const formFields = [
     {
@@ -50,45 +57,58 @@ export default function SemesterRegistration() {
       type: "text",
       placeholder: "Result",
       icon: <FaGraduationCap />,
-      disabled: false,
+      disabled: true,
     },
     {
       label: "No Dues Certificate",
-      name: "No Dues Certificate",
+      name: "noDueCertificates",
       type: "text",
       placeholder: "No Dues Certificate",
       icon: <MdLock />,
-      disabled: false,
+      disabled: true,
     },
   ];
 
   useEffect(() => {
-    const studentId = localStorage.getItem("username");
-    async function fetchRegistrationData() {
+    const username = localStorage.getItem("username");
+    const batch = username.slice(0, 4);
+    const admissionYear = parseInt(batch, 10);
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1;
+    const semester =
+      2 * (currentYear - admissionYear) + (currentMonth <= 5 ? 0 : 1);
+    async function fetchVerificationData() {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/admin/get-student/${studentId}`
+          `http://localhost:5000/api/verify-fees/get-verified/${username}/${semester}`
         );
-        const studentData = response.data.data;
-        console.log(studentData);
-        const batch = studentData.username.slice(0, 4);
-        const admissionYear = parseInt(batch, 10);
-        const currentYear = new Date().getFullYear();
-        const currentMonth = new Date().getMonth() + 1;
-        const semester =
-          2 * (currentYear - admissionYear) + (currentMonth <= 5 ? 0 : 1);
-
+        const result = {
+          result: "Not Published",
+          noDueCertificates: "Not Verified",
+          batch: batch,
+          username: username,
+          semester: semester,
+        };
+        const verifications = response.data.data;
+        if (
+          verifications.instituteFeeVerified &&
+          verifications.hostelFeeVerified &&
+          verifications.messFeeVerified
+        ) {
+          result.noDueCertificates = "Verified";
+        }
+        if (verifications.resultPublished) {
+          result.result = "Published";
+        }
         setRegistrationData({
           ...registrationData,
-          batch: batch,
-          semester: semester,
-          username: studentData.username,
+          ...result,
         });
       } catch (err) {
         console.log(err);
       }
     }
-    fetchRegistrationData();
+    fetchVerificationData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   console.log(registrationData);
@@ -97,11 +117,10 @@ export default function SemesterRegistration() {
     if (e.target.type === "file") {
       setRegistrationData({
         ...registrationData,
-        [e.target.name]: e.target.value, // Assuming you only want to handle one file
-        "file": e.target.files[0], // Assuming you only want to handle one file
+        [e.target.name]: e.target.value,
+        file: e.target.files[0],
       });
     } else {
-      // Handle non-file input change
       setRegistrationData({
         ...registrationData,
         [e.target.name]: e.target.value,
@@ -112,8 +131,7 @@ export default function SemesterRegistration() {
   const getHash = async (file) => {
     const hash = await uploadToIPFS(file);
     return hash;
-  }
-
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -138,11 +156,10 @@ export default function SemesterRegistration() {
       console.log(err);
     }
   };
-  
+
   console.log(registrationData);
 
-
-  const isSubmitDisabled = false;
+  const isSubmitDisabled = registrationData.registrationForm === "" || registrationData.result === "Not Published" || registrationData.noDueCertificates === "Not Verified";
   return (
     <div className="student_registration_container">
       <div className="student_registration_container__registration_box">

@@ -19,6 +19,7 @@ import FinanceUpload from "./containers/FinanceUpload";
 import { FaArrowLeft, FaSignOutAlt } from "react-icons/fa";
 import FacultyList from "./containers/FacultyList";
 import FacultyStudentDetails from "./containers/FacultyStudentDetails";
+import AcademicsResultUpload from "./containers/AcademicsResultUpload";
 
 const routes = [
   { path: "/", element: <Login /> },
@@ -43,6 +44,10 @@ const routes = [
     path: "/faculty/home/:username/:semester",
     element: <FacultyStudentDetails />,
   },
+  {
+    path: "/admin/home",
+    element: <AcademicsResultUpload></AcademicsResultUpload>,
+  },
 ];
 
 export default function App() {
@@ -58,12 +63,12 @@ export default function App() {
           <FaArrowLeft onClick={() => navigate(-1)}></FaArrowLeft>
         </div>
         <div className="app_top__logout_btn">
-          <FaSignOutAlt onClick={
-            () => {
-              localStorage.clear()
-              navigate('/')
-            }
-          }/>
+          <FaSignOutAlt
+            onClick={() => {
+              localStorage.clear();
+              navigate("/");
+            }}
+          />
         </div>
       </div>
       <div className="app_body">

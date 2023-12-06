@@ -22,7 +22,7 @@ export default function Profile() {
     <>
       <div className="profile_container">
         <div className="profile_container__image_container">
-          <img src="https://picsum.photos/seed/picsum/200/300" alt="profile" />
+          <img src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg" alt="profile" />
         </div>
         <div className="profile_container__info_container">
           {data.map((item, index) => {
@@ -47,7 +47,7 @@ export default function Profile() {
               Change Password
             </button>
             <button className="profile_container__info_container__buttons__button" onClick={() => {
-              navigate(-1);
+              navigate();
             }}>
               Go to Dashboard
             </button>

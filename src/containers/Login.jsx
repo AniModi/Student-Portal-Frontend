@@ -110,9 +110,6 @@ export default function Login() {
             </Input>
           </div>
         </div>
-        <div className="login_page_container__login_box__forgot_password_container">
-          <Link to="/">Forgot Password?</Link>
-        </div>
         <div className="login_page_container__login_box__login_button_container">
           <button
             onClick={handleSubmit}
