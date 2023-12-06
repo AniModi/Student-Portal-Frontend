@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Table.scss";
 import Pagination from "./Pagination";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Table = () => {
+const Table = ({data, setData}) => {
   const [filters, setFilters] = useState({
     username: "",
     semester: "",
@@ -13,32 +12,7 @@ const Table = () => {
 
   const navigate = useNavigate();
 
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const jwt = localStorage.getItem("token");
-        const response = await axios.get(
-          "http://localhost:5000/api/verify-fees/get",
-          {
-            headers: {
-              Authorization: `Bearer ${jwt}`,
-            },
-          }
-        );
-        const data = response.data.data;
-        for(let i = 0; i < data.length; i++) {
-          data[i].batch = data[i].username.slice(0, 4);
-        }
-        setData(response.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    fetchData();
-  }, []);
-
+  
 
   const filteredData = data.filter((_data) => {
     return (
@@ -99,9 +73,13 @@ const Table = () => {
               <td>{data.username}</td>
               <td>{data.semester}</td>
               <td>
-                <button onClick={() => {
-                  navigate(`${data.username}/${data.semester}`);
-                }}>View</button>
+                <button
+                  onClick={() => {
+                    navigate(`${data.username}/${data.semester}`);
+                  }}
+                >
+                  View
+                </button>
               </td>
             </tr>
           ))}
@@ -110,7 +88,7 @@ const Table = () => {
       <Pagination
         currentPage={1}
         setCurrentPage={() => {}}
-        totalPages={(filteredData.length + 9)/ 10}
+        totalPages={(filteredData.length + 9) / 10}
         totalData={10}
       />
     </div>

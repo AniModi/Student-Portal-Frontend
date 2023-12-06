@@ -4,7 +4,7 @@ import axios from "axios";
 
 export default function FeesVerificationStatus() {
   const [status, setStatus] = useState({
-    instituteFeeVerified: true,
+    instituteFeeVerified: false,
     hostelFeeVerified: false,
     messFeeVerified: false,
   });

@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import './FinanceStudentList.scss';
-import Table from '../components/Table';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import "./FacultyList.scss";
+import axios from "axios";
+import Table from "../components/Table";
 
-const FinanceStudentList = () => {
-    const [data, setData] = useState([]);
+export default function FacultyList() {
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
         const jwt = localStorage.getItem("token");
         const response = await axios.get(
-          "http://localhost:5000/api/verify-fees/get",
+          "http://localhost:5000/api/registration/get-all-students",
           {
             headers: {
               Authorization: `Bearer ${jwt}`,
@@ -29,9 +29,5 @@ const FinanceStudentList = () => {
     }
     fetchData();
   }, []);
-    return (
-        <Table data={data} setData={setData}></Table>
-    );
+  return <Table data={data} setData={setData}></Table>;
 }
-
-export default FinanceStudentList;

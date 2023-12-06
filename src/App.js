@@ -16,23 +16,33 @@ import FinanceDepartmentHome from "./containers/FinanceDepartmentHome";
 import FinanceStudentList from "./containers/FinanceStudentList";
 import VerifyStudentFees from "./containers/VerifyStudentFees";
 import FinanceUpload from "./containers/FinanceUpload";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaSignOutAlt } from "react-icons/fa";
+import FacultyList from "./containers/FacultyList";
+import FacultyStudentDetails from "./containers/FacultyStudentDetails";
 
 const routes = [
   { path: "/", element: <Login /> },
   { path: "/student/semester-registration", element: <SemesterRegistration /> },
   { path: "/student/registration-status", element: <RegistrationStatus /> },
   { path: "/student/fee-verification", element: <FeesVerificationForm /> },
-  { path: "/student/fee-verification-status", element: <FeesVerificationStatus /> },
+  {
+    path: "/student/fee-verification-status",
+    element: <FeesVerificationStatus />,
+  },
   { path: "/student/home", element: <Home /> },
   { path: "/student/profile", element: <Profile /> },
   { path: "/change-password", element: <ChangePassword /> },
-  {path : "/student/select-document", element : <DocumentSelectionPage/>},
-  {path : "/student/select-document/:id", element : <DownloadDocumentPage/>},
-  {path : "/finance/home", element : <FinanceDepartmentHome/>},
-  {path : "/finance/students", element : <FinanceStudentList/>},
-  {path : "/finance/students/:id/:semester", element : <VerifyStudentFees/>},
-  {path : "/finance/upload", element : <FinanceUpload/>},
+  { path: "/student/select-document", element: <DocumentSelectionPage /> },
+  { path: "/student/select-document/:id", element: <DownloadDocumentPage /> },
+  { path: "/finance/home", element: <FinanceDepartmentHome /> },
+  { path: "/finance/students", element: <FinanceStudentList /> },
+  { path: "/finance/students/:id/:semester", element: <VerifyStudentFees /> },
+  { path: "/finance/upload", element: <FinanceUpload /> },
+  { path: "/faculty/home", element: <FacultyList /> },
+  {
+    path: "/faculty/home/:username/:semester",
+    element: <FacultyStudentDetails />,
+  },
 ];
 
 export default function App() {
@@ -47,11 +57,24 @@ export default function App() {
         <div className="app_top__back_btn">
           <FaArrowLeft onClick={() => navigate(-1)}></FaArrowLeft>
         </div>
+        <div className="app_top__logout_btn">
+          <FaSignOutAlt onClick={
+            () => {
+              localStorage.clear()
+              navigate('/')
+            }
+          }/>
+        </div>
       </div>
       <div className="app_body">
         <Routes>
           {routes.map((route, index) => (
-            <Route key={index} exact path={route.path} element={route.element} />
+            <Route
+              key={index}
+              exact
+              path={route.path}
+              element={route.element}
+            />
           ))}
         </Routes>
       </div>
