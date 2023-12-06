@@ -53,8 +53,12 @@
               &__box {
                   width: 50%;
                   height: 30%;
-                  background-color: white;
                   border-radius: 5px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  padding: 0.5rem 0;
+                  font-weight: bold;
               }
           }
           &:not(:last-of-type) {
@@ -84,3 +88,11 @@
     }
   }
   
+
+  .green {
+    background-color: green;
+  }
+
+  .yellow {
+    background-color: yellow;
+  }

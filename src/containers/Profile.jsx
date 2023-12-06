@@ -1,10 +1,9 @@
 import React from "react";
 import "./Profile.scss";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
-
-
-
+  const navigate = useNavigate();
   const data = [
     {
       title: "Name",
@@ -42,10 +41,14 @@ export default function Profile() {
             );
           })}
           <div className="profile_container__info_container__buttons">
-            <button className="profile_container__info_container__buttons__button">
+            <button className="profile_container__info_container__buttons__button" onClick={() => {
+              navigate("/change-password");
+            }}>
               Change Password
             </button>
-            <button className="profile_container__info_container__buttons__button">
+            <button className="profile_container__info_container__buttons__button" onClick={() => {
+              navigate(-1);
+            }}>
               Go to Dashboard
             </button>
           </div>
