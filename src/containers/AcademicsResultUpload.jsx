@@ -1,12 +1,28 @@
-import React, { useState } from "react";
-import "../AcademicsResultUpload.scss";
+import React, { useState, useEffect } from "react";
+import "./AcademicsResultUpload.scss";
 import Input from "../components/Input";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { uploadToIPFS } from "../uploadToPinata";
+import Web3 from 'web3';
+import { fetchDataAndCreateJSON } from "../createJSON";
 
 
 export default function AcademicsResultUpload() {
+
+  async function connect() {
+    try {
+      if (typeof window.ethereum !== "undefined") {
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+        console.log("Metamask Connected");
+      } else {
+        console.log("Metamask Not Found");
+      }
+    } catch (error) {
+      console.error("Error connecting to MetaMask:", error);
+    }
+  }
+
   const formFields = [
     {
       label: "Batch",
@@ -53,6 +69,8 @@ export default function AcademicsResultUpload() {
   ];
 
   const [form, setForm] = useState({});
+  const [web3, setWeb3] = useState(null);
+  const [account, setAccount] = useState(null);
 
   const handleForm = (e) => {
     if (e.target.type === "file") {
@@ -72,6 +90,7 @@ export default function AcademicsResultUpload() {
     const hash = await uploadToIPFS(file);
     return hash;
   };
+  console.log(form);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -86,7 +105,7 @@ export default function AcademicsResultUpload() {
       console.log(formDetails);
       const jwtToken = localStorage.getItem("token");
       const res = await axios.post(
-        "http://localhost:5000/api/verify-fees/upload-receipts",
+        "http://localhost:5000/api/admin/upload-result",
         formDetails,
         {
           headers: {
@@ -96,13 +115,18 @@ export default function AcademicsResultUpload() {
         }
       );
       alert("Result Uploaded Successfully");
-      setForm({});
+      const { username, semester } = formDetails;
+      fetchDataAndCreateJSON(username,semester);
     } catch (err) {
       console.log(err);
     }
   };
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    connect();
+  }, [])
 
   return (
     <div className="result_upload_container">
