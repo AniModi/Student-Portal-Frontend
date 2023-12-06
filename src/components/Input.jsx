@@ -13,6 +13,7 @@ export default function Input({
   children,
   inputClass,
   genClass,
+  disabled
 }) {
   const [showPassword, setShowPassword] = useToggle(false);
 
@@ -54,6 +55,7 @@ export default function Input({
           onChange={onChange}
           name={name}
           className={inputClass}
+          disabled={disabled}
         />
         <div className="input_component_container__input__icon">{children}</div>
       </div>

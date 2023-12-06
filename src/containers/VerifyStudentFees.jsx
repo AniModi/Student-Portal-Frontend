@@ -1,7 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./VerifyStudentFees.scss";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const VerifyStudentFees = () => {
+  const {id, semester} = useParams();
+  const [data, setData] = useState({
+    insReferences: "",
+    hostelFeesStatus: "",
+    messFeesStatus: "",
+  });
+
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const jwt = localStorage.getItem("token");
+        const response = await axios.get(
+          `http://localhost:5000/api/verify-fees/get/${id}/${semester}`,
+          {
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+            },
+          }
+        );
+        const d = response.data.data;
+        setData(d);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchData();
+  }, []);
+
+
   return (
     <>
       <div className="verify_student_fees_container">
@@ -15,7 +47,9 @@ const VerifyStudentFees = () => {
                 Institute Fees
               </div>
               <div className="verify_student_fees_container__status__container__row__status">
-                <div className="verify_student_fees_container__status__container__row__status__box"></div>
+                <div className="verify_student_fees_container__status__container__row__status__box">
+                  {data.instituteFeeReferences}
+                </div>
               </div>
               <div className="verify_student_fees_container__status__container__row__buttons">
                 <button className="verify_student_fees_container__status__container__row__buttons__button">
@@ -28,7 +62,9 @@ const VerifyStudentFees = () => {
                 Hostel Fees
               </div>
               <div className="verify_student_fees_container__status__container__row__status">
-                <div className="verify_student_fees_container__status__container__row__status__box"></div>
+                <div className="verify_student_fees_container__status__container__row__status__box">
+                  {data.hostelFeeReferences}
+                </div>
               </div>
               <div className="verify_student_fees_container__status__container__row__buttons">
                 <button className="verify_student_fees_container__status__container__row__buttons__button">
@@ -41,7 +77,9 @@ const VerifyStudentFees = () => {
                 Mess Fees
               </div>
               <div className="verify_student_fees_container__status__container__row__status">
-                <div className="verify_student_fees_container__status__container__row__status__box"></div>
+                <div className="verify_student_fees_container__status__container__row__status__box">
+                  {data.messFeeReferences}
+                </div>
               </div>
               <div className="verify_student_fees_container__status__container__row__buttons">
                 <button className="verify_student_fees_container__status__container__row__buttons__button">

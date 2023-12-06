@@ -2,18 +2,21 @@ import React from "react";
 import "./Profile.scss";
 
 export default function Profile() {
+
+
+
   const data = [
     {
       title: "Name",
-      content: "Name",
+      content: localStorage.getItem("name"),
     },
     {
       title: "Student ID",
-      content: "202151022",
+      content: localStorage.getItem("username"),
     },
     {
       title: "Email Address",
-      content: "202151022@iiitvadodara.ac.in",
+      content: `${localStorage.getItem("username")}@iiitvadodara.ac.in`,
     },
   ];
   return (

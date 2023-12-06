@@ -1,34 +1,50 @@
-// Table.jsx
-
-import React, { useState } from 'react';
-import './Table.scss';
-import Pagination from './Pagination';
-
-const dummyData = [
-  { batch: '2022', studentId: 'S001', semester: 'Spring' },
-  { batch: '2021', studentId: 'S002', semester: 'Fall' },
-  { batch: '2023', studentId: 'S003', semester: 'Summer' },
-  { batch: '2021', studentId: 'S002', semester: 'Fall' },
-  { batch: '2023', studentId: 'S003', semester: 'Summer' },
-  { batch: '2021', studentId: 'S002', semester: 'Fall' },
-  { batch: '2023', studentId: 'S003', semester: 'Summer' },
-  { batch: '2021', studentId: 'S002', semester: 'Fall' },
-  { batch: '2023', studentId: 'S003', semester: 'Summer' },
-  // Add more dummy data as needed
-];
+import React, { useEffect, useState } from "react";
+import "./Table.scss";
+import Pagination from "./Pagination";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Table = () => {
   const [filters, setFilters] = useState({
-    studentId: '',
-    semester: '',
-    batch: '',
+    username: "",
+    semester: "",
+    batch: "",
   });
 
-  const filteredData = dummyData.filter((data) => {
+  const navigate = useNavigate();
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const jwt = localStorage.getItem("token");
+        const response = await axios.get(
+          "http://localhost:5000/api/verify-fees/get",
+          {
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+            },
+          }
+        );
+        const data = response.data.data;
+        for(let i = 0; i < data.length; i++) {
+          data[i].batch = data[i].username.slice(0, 4);
+        }
+        setData(response.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchData();
+  }, []);
+
+
+  const filteredData = data.filter((_data) => {
     return (
-      data.studentId.includes(filters.studentId) &&
-      data.semester.includes(filters.semester) &&
-      data.batch.includes(filters.batch)
+      _data.username.includes(filters.username) &&
+      _data.semester.includes(filters.semester) &&
+      _data.batch.includes(filters.batch)
     );
   });
 
@@ -43,8 +59,8 @@ const Table = () => {
         <label htmlFor="studentIdFilter">Student ID:</label>
         <input
           type="text"
-          id="studentId"
-          value={filters.studentId}
+          id="username"
+          value={filters.username}
           onChange={handleFilterChange}
           placeholder="Filter by Student ID"
         />
@@ -80,10 +96,12 @@ const Table = () => {
           {filteredData.map((data, index) => (
             <tr key={index}>
               <td>{data.batch}</td>
-              <td>{data.studentId}</td>
+              <td>{data.username}</td>
               <td>{data.semester}</td>
               <td>
-                <button>View</button>
+                <button onClick={() => {
+                  navigate(`${data.username}/${data.semester}`);
+                }}>View</button>
               </td>
             </tr>
           ))}
@@ -92,7 +110,7 @@ const Table = () => {
       <Pagination
         currentPage={1}
         setCurrentPage={() => {}}
-        totalPages={10}
+        totalPages={(filteredData.length + 9)/ 10}
         totalData={10}
       />
     </div>

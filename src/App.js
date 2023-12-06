@@ -3,7 +3,7 @@ import "./App.scss";
 import Login from "./containers/Login";
 import SemesterRegistration from "./containers/SemesterRegistration";
 import RegistrationStatus from "./containers/RegistrationStatus";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import FeesVerificationForm from "./containers/FeesVerificationForm";
 import FeesVerificationStatus from "./containers/FeesVerificationStatus";
 import Home from "./containers/Home";
@@ -16,32 +16,37 @@ import FinanceDepartmentHome from "./containers/FinanceDepartmentHome";
 import FinanceStudentList from "./containers/FinanceStudentList";
 import VerifyStudentFees from "./containers/VerifyStudentFees";
 import FinanceUpload from "./containers/FinanceUpload";
+import { FaArrowLeft } from "react-icons/fa";
 
 const routes = [
   { path: "/", element: <Login /> },
-  { path: "/semester-registration", element: <SemesterRegistration /> },
-  { path: "/registration-status", element: <RegistrationStatus /> },
-  { path: "/fee-verification", element: <FeesVerificationForm /> },
-  { path: "/fee-verification-status", element: <FeesVerificationStatus /> },
-  { path: "/home", element: <Home /> },
-  { path: "/profile", element: <Profile /> },
+  { path: "/student/semester-registration", element: <SemesterRegistration /> },
+  { path: "/student/registration-status", element: <RegistrationStatus /> },
+  { path: "/student/fee-verification", element: <FeesVerificationForm /> },
+  { path: "/student/fee-verification-status", element: <FeesVerificationStatus /> },
+  { path: "/student/home", element: <Home /> },
+  { path: "/student/profile", element: <Profile /> },
   { path: "/change-password", element: <ChangePassword /> },
-  {path : "/select-document", element : <DocumentSelectionPage/>},
-  {path : "/select-document/:id", element : <DownloadDocumentPage/>},
+  {path : "/student/select-document", element : <DocumentSelectionPage/>},
+  {path : "/student/select-document/:id", element : <DownloadDocumentPage/>},
   {path : "/finance/home", element : <FinanceDepartmentHome/>},
   {path : "/finance/students", element : <FinanceStudentList/>},
-  {path : "/finance/students/:id", element : <VerifyStudentFees/>},
+  {path : "/finance/students/:id/:semester", element : <VerifyStudentFees/>},
   {path : "/finance/upload", element : <FinanceUpload/>},
 ];
 
 export default function App() {
+  const navigate = useNavigate();
   return (
     <>
       <div className="app_top">
-        <div>
+        <div className="app_top__logo">
           <PiStudent></PiStudent>
         </div>
         Student Portal
+        <div className="app_top__back_btn">
+          <FaArrowLeft onClick={() => navigate(-1)}></FaArrowLeft>
+        </div>
       </div>
       <div className="app_body">
         <Routes>

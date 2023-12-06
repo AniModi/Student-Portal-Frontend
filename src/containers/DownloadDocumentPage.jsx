@@ -5,7 +5,7 @@ import "./DownloadDocumentPage.scss";
 
 
 export default function DownloadDocumentPage() {
-  const id = window.location.pathname.split("/")[2];
+  const id = window.location.pathname.split("/")[3];
   const data = {
     "registration-form": {
       title: "Registration Form",

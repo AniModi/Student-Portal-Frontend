@@ -7,53 +7,59 @@ import {
   FaUser,
   FaWpforms,
 } from "react-icons/fa";
+import axios from "axios";
 
 export default function FeesVerificationForm() {
   const [verificationData, setVerificationData] = useState({});
-  const [invalidPassword, setInvalidPassword] = useState(false);
 
   const formFields = [
     {
       label: "Batch",
-      name: "Batch",
+      name: "batch",
       type: "text",
       placeholder: "Batch",
       icon: <FaCalendarAlt />,
+      disabled: true,
     },
     {
       label: "Student ID",
-      name: "Student ID",
+      name: "username",
       type: "text",
       placeholder: "Student ID",
       icon: <FaUser />,
+      disabled: true,
     },
     {
       label: "Semester",
-      name: "Semester",
+      name: "semester",
       type: "text",
       placeholder: "Semester",
       icon: <FaWpforms />,
+      disabled: true,
     },
     {
       label: "Payment Proof (Institute)",
-      name: "Payment Proof (Institute)",
+      name: "instituteFeeReferences",
       type: "text",
       placeholder: "Payment Proof (Institute)",
       icon: <FaReceipt />,
+      disabled: false,
     },
     {
       label: "Payment Proof (Hostel)",
-      name: "Payment Proof (Hostel)",
+      name: "hostelFeeReferences",
       type: "text",
       placeholder: "Payment Proof (Hostel)",
       icon: <FaReceipt />,
+      disabled: false,
     },
     {
       label: "Payment Proof (Mess)",
-      name: "Payment Proof (Mess)",
+      name: "messFeeReferences",
       type: "text",
       placeholder: "Payment Proof (Mess)",
       icon: <FaReceipt />,
+      disabled: false,
     },
   ];
 
@@ -71,28 +77,53 @@ export default function FeesVerificationForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(verificationData);
-    if (
-      verificationData.Username === "validUsername" &&
-      verificationData.Password === "validPassword"
-    ) {
-      console.log("Login successful");
-      setInvalidPassword(false);
-    } else {
-      console.log("Invalid password");
-      setInvalidPassword(true);
+    try {
+      const jwt = localStorage.getItem("token");
+      const response = await axios.post("http://localhost:5000/api/verify-fees/upload", verificationData, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      console.log(response);
+
+    }
+    catch(err) {
+      console.log(err);
     }
   };
 
   useEffect(() => {
-    if (invalidPassword) {
-      setTimeout(() => {
-        setInvalidPassword(false);
-      }, 500);
+    const studentId = localStorage.getItem("username");
+    async function fetchRegistrationData() {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/admin/get-student/${studentId}`
+        );
+        const studentData = response.data.data;
+        console.log(studentData);
+        const batch = studentData.username.slice(0, 4);
+        const admissionYear = parseInt(batch, 10);
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth() + 1;
+        const semester =
+          2 * (currentYear - admissionYear) + (currentMonth <= 5 ? 0 : 1);
+
+        setVerificationData({
+          ...verificationData,
+          batch: batch,
+          semester: semester,
+          username: studentData.username,
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
-  }, [invalidPassword]);
+    fetchRegistrationData();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  
 
   const isSubmitDisabled = false;
   return (
@@ -109,10 +140,10 @@ export default function FeesVerificationForm() {
                   label={field.label}
                   name={field.name}
                   type={field.type}
+                  value={verificationData[field.name]}
                   placeholder={field.placeholder}
                   onChange={handleVerificationData}
-                  inputClass={invalidPassword ? "invalid" : ""}
-                  genClass={invalidPassword ? "shake" : ""}
+                  disabled={field.disabled}
                 >
                   {field.icon}
                 </Input>
@@ -126,7 +157,7 @@ export default function FeesVerificationForm() {
             disabled={isSubmitDisabled}
             className={isSubmitDisabled && "disabled"}
           >
-            Register
+            Submit
           </button>
         </div>
       </div>
