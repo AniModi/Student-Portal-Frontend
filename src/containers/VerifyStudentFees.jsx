@@ -4,13 +4,12 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const VerifyStudentFees = () => {
-  const {id, semester} = useParams();
+  const { id, semester } = useParams();
   const [data, setData] = useState({
     insReferences: "",
     hostelFeesStatus: "",
     messFeesStatus: "",
   });
-
 
   useEffect(() => {
     async function fetchData() {
@@ -33,6 +32,27 @@ const VerifyStudentFees = () => {
     fetchData();
   }, []);
 
+  const handleApprove = async (type) => {
+    try {
+      const jwt = localStorage.getItem("token");
+      const response = await axios.post(
+        `http://localhost:5000/api/verify-fees/verify`,
+        {
+          username: id,
+          semester: semester,
+          [type]: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+      console.log(response.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -52,7 +72,12 @@ const VerifyStudentFees = () => {
                 </div>
               </div>
               <div className="verify_student_fees_container__status__container__row__buttons">
-                <button className="verify_student_fees_container__status__container__row__buttons__button">
+                <button
+                  className="verify_student_fees_container__status__container__row__buttons__button"
+                  onClick={() => {
+                    handleApprove("instituteFeeVerified");
+                  }}
+                >
                   Approve
                 </button>
               </div>
@@ -67,7 +92,12 @@ const VerifyStudentFees = () => {
                 </div>
               </div>
               <div className="verify_student_fees_container__status__container__row__buttons">
-                <button className="verify_student_fees_container__status__container__row__buttons__button">
+                <button
+                  className="verify_student_fees_container__status__container__row__buttons__button"
+                  onClick={() => {
+                    handleApprove("hostelFeeVerified");
+                  }}
+                >
                   Approve
                 </button>
               </div>
@@ -82,7 +112,12 @@ const VerifyStudentFees = () => {
                 </div>
               </div>
               <div className="verify_student_fees_container__status__container__row__buttons">
-                <button className="verify_student_fees_container__status__container__row__buttons__button">
+                <button
+                  className="verify_student_fees_container__status__container__row__buttons__button"
+                  onClick={() => {
+                    handleApprove("messFeeVerified");
+                  }}
+                >
                   Approve
                 </button>
               </div>
