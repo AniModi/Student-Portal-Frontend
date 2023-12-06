@@ -7,6 +7,7 @@ import { CiMemoPad } from "react-icons/ci";
 import "./SemesterRegistration.scss";
 import axios from "axios";
 import { uploadToIPFS } from "../uploadToPinata";
+import { useNavigate } from "react-router-dom";
 
 export default function SemesterRegistration() {
   const [registrationData, setRegistrationData] = useState({
@@ -17,6 +18,10 @@ export default function SemesterRegistration() {
     result: "Not Published",
     noDueCertificates: "Not Verified",
   });
+
+  const navigate = useNavigate();
+
+  const [verified, setVerified] = useState(false);
 
   const formFields = [
     {
@@ -111,7 +116,6 @@ export default function SemesterRegistration() {
     fetchVerificationData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  console.log(registrationData);
 
   const handleRegistrationData = (e) => {
     if (e.target.type === "file") {
@@ -152,14 +156,48 @@ export default function SemesterRegistration() {
         }
       );
       console.log(res);
+      alert("Registration Successful");
+      navigate(-1)
     } catch (err) {
       console.log(err);
+      alert("Some error ocurred");
     }
   };
 
-  console.log(registrationData);
 
-  const isSubmitDisabled = registrationData.registrationForm === "" || registrationData.result === "Not Published" || registrationData.noDueCertificates === "Not Verified";
+  useEffect(() => {
+    async function fetchData() {
+      const username = localStorage.getItem("username");
+      const batch = username.slice(0, 4);
+      const admissionYear = parseInt(batch, 10);
+      const currentYear = new Date().getFullYear();
+      const currentMonth = new Date().getMonth() + 1;
+      const semester =
+        2 * (currentYear - admissionYear) + (currentMonth <= 5 ? 0 : 1);
+      try {
+        const jwt = localStorage.getItem("token");
+        const response = await axios.get(
+          `http://localhost:5000/api/registration/is-approved/${username}/${semester}`,
+          {
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setVerified(response.data.data.registrationVerified);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchData();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const isSubmitDisabled =
+    registrationData.registrationForm === "" ||
+    registrationData.result === "Not Published" ||
+    registrationData.noDueCertificates === "Not Verified" ||
+    verified;
   return (
     <div className="student_registration_container">
       <div className="student_registration_container__registration_box">
@@ -194,7 +232,7 @@ export default function SemesterRegistration() {
             disabled={isSubmitDisabled}
             className={isSubmitDisabled ? "disabled" : ""}
           >
-            Register
+            {verified ? "Already verified" : "Submit"}
           </button>
         </div>
       </div>

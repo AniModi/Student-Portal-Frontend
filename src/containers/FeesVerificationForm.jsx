@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./FeesVerificationForm.scss";
 import Input from "../components/Input";
-import {
-  FaCalendarAlt,
-  FaReceipt,
-  FaUser,
-  FaWpforms,
-} from "react-icons/fa";
+import { FaCalendarAlt, FaReceipt, FaUser, FaWpforms } from "react-icons/fa";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function FeesVerificationForm() {
   const [verificationData, setVerificationData] = useState({});
+  const navigate = useNavigate();
 
   const formFields = [
     {
@@ -81,16 +78,21 @@ export default function FeesVerificationForm() {
     e.preventDefault();
     try {
       const jwt = localStorage.getItem("token");
-      const response = await axios.post("http://localhost:5000/api/verify-fees/upload", verificationData, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/verify-fees/upload",
+        verificationData,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
       console.log(response);
-
-    }
-    catch(err) {
+      alert("Fees References posted successfully");
+      navigate(-1);
+    } catch (err) {
       console.log(err);
+      alert("Some error ocurred");
     }
   };
 
@@ -122,8 +124,6 @@ export default function FeesVerificationForm() {
     }
     fetchRegistrationData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  
 
   const isSubmitDisabled = false;
   return (

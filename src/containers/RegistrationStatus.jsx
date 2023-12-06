@@ -4,6 +4,8 @@ import axios from "axios";
 
 export default function RegistrationStatus() {
   const [status, setStatus] = useState(false);
+  const [comment, setComment] = useState("");
+
 
   useEffect(() => {
     async function fetchStatus() {
@@ -25,6 +27,28 @@ export default function RegistrationStatus() {
       }
     }
     fetchStatus();
+  }, []);
+
+  useEffect(() => {
+    async function fetchComment() {
+      try {
+        const username = localStorage.getItem("username");
+        const batch = username.slice(0, 4);
+        const admissionYear = parseInt(batch, 10);
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth() + 1;
+        const semester =
+          2 * (currentYear - admissionYear) + (currentMonth <= 5 ? 0 : 1);
+        const response = await axios.get(
+          `http://localhost:5000/api/comment/${username}/${semester}`
+        );
+        const data = response.data.newComment.facultyComments;
+        setComment(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchComment();
   }, []);
 
   console.log(status);
@@ -54,7 +78,9 @@ export default function RegistrationStatus() {
           <div className="registration_status_container__comments__title">
             Comments
           </div>
-          <div className="registration_status_container__comments__container"></div>
+          <div className="registration_status_container__comments__container">
+            {comment}
+          </div>
         </div>
       </div>
     </>

@@ -16,3 +16,12 @@ body::-webkit-scrollbar {
   height: 100%;
 }
 
+
+
+.green {
+  background-color: green !important;
+}
+
+.yellow {
+  background-color: yellow !important;
+}

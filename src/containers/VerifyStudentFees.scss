@@ -102,9 +102,13 @@
     }
     &__container {
       border: 2px solid #0452a3;
-      width: 60%;
+      width: calc(60% - 2rem);
       height: 50%;
       border-radius: 10px;
+      padding: 1rem;
+      &:active {
+        outline: none;
+      }
     }
     &__button {
       margin: 1rem 0rem;

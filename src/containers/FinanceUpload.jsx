@@ -107,7 +107,6 @@ const FinanceUpload = () => {
       formDetails["instituteFeeReceipt"] = instituteFeesReceipt;
       formDetails["hostelFeeReceipt"] = hostelFeesReceipt;
       formDetails["messFeeReceipt"] = messFeesReceipt;
-      console.log(formDetails);
       const jwtToken = localStorage.getItem("token");
       const res = await axios.post(
         "http://localhost:5000/api/verify-fees/upload-receipts",
@@ -120,9 +119,11 @@ const FinanceUpload = () => {
         }
       );
       console.log(res);
-      // setForm({});
+      alert("Receipts Uploaded Successfully");
+      navigate(-1);
     } catch (err) {
       console.log(err);
+      alert("Some error ocurred");
     }
   }
 

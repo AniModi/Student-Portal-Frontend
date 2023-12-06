@@ -9,6 +9,31 @@ export default function FeesVerificationStatus() {
     messFeeVerified: false,
   });
 
+  const [comment, setComment] = useState("");
+
+  useEffect(() => {
+    async function fetchComment() {
+      try {
+        const username = localStorage.getItem("username");
+        const batch = username.slice(0, 4);
+        const admissionYear = parseInt(batch, 10);
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth() + 1;
+        const semester =
+          2 * (currentYear - admissionYear) + (currentMonth <= 5 ? 0 : 1);
+
+        const response = await axios.get(
+          `http://localhost:5000/api/comment/${username}/${semester}`
+        );
+        const data = response.data;
+        setComment(data.newComment.financeComments);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchComment();
+  }, []);
+
   useEffect(() => {
     async function fetchStatus() {
       try {
@@ -95,7 +120,9 @@ export default function FeesVerificationStatus() {
           <div className="fees_verification_status_container__comments__title">
             Comments
           </div>
-          <div className="fees_verification_status_container__comments__container"></div>
+          <div className="fees_verification_status_container__comments__container">
+            {comment}
+          </div>
         </div>
       </div>
     </>

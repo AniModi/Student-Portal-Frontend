@@ -3,11 +3,12 @@ import "./FacultyStudentDetails.scss";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-
 export default function FacultyStudentDetails() {
   const { username, semester } = useParams();
 
   const [document, setDocument] = useState({});
+  const [comment, setComment] = useState("");
+  const [verified, setVerified] = useState(false);
 
   const navigate = useNavigate();
 
@@ -53,7 +54,53 @@ export default function FacultyStudentDetails() {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
+
+  const handleComment = async () => {
+    try {
+      const jwt = localStorage.getItem("token");
+      const response = await axios.post(
+        `http://localhost:5000/api/comment/faculty`,
+        {
+          username: username,
+          semester: semester,
+          comment: comment,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+      console.log(response);
+      alert("Comment added");
+    } catch (err) {
+      console.log(err);
+      alert("Some error ocurred");
+    }
+  };
+
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const jwt = localStorage.getItem("token");
+        const response = await axios.get(
+          `http://localhost:5000/api/registration/is-approved/${username}/${semester}`,
+          {
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setVerified(response.data.data.registrationVerified);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchData();
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -79,7 +126,7 @@ export default function FacultyStudentDetails() {
                       .focus();
                   }}
                 >
-                  Link
+                  View
                 </div>
               </div>
             </div>
@@ -99,7 +146,7 @@ export default function FacultyStudentDetails() {
                       .focus();
                   }}
                 >
-                  Link
+                  View
                 </div>
               </div>
             </div>
@@ -108,12 +155,13 @@ export default function FacultyStudentDetails() {
                 Action
               </div>
               <div className="faculty_verification_status_container__status__container__row__status">
-                <div
-                  className={`faculty_verification_status_container__status__container__row__status__box ${"green"}`}
+                <button
+                  className={`faculty_verification_status_container__status__container__row__status__box ${verified ? "disabled" : "green"}}`}
                   onClick={handleApprove}
+                  disabled={verified}
                 >
-                  Approve
-                </div>
+                  {verified ? "Approved" : "Approve"}
+                </button>
               </div>
             </div>
           </div>
@@ -122,8 +170,16 @@ export default function FacultyStudentDetails() {
           <div className="faculty_verification_status_container__comments__title">
             Comments
           </div>
-          <textarea className="faculty_verification_status_container__comments__container"></textarea>
-          <button className="faculty_verification_status_container__comments__button">
+          <textarea
+            className="faculty_verification_status_container__comments__container"
+            onChange={(e) => {
+              setComment(e.target.value);
+            }}
+          ></textarea>
+          <button
+            className="faculty_verification_status_container__comments__button"
+            onClick={handleComment}
+          >
             Add Comment
           </button>
         </div>

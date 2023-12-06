@@ -54,12 +54,7 @@ export default function DownloadDocumentPage() {
     if(id === "registration-form") {
       try {
 
-        const response = await axios.get(`http://localhost:5000/api/fetch-documents/${username}/${semester}`,{
-          headers: {
-            Authorization: `Bearer ${token}`,
-          }
-        });
-        const {registrationForm} = response.data;
+        const registrationForm = 'QmZfFCadmDn98hKJsuhh55iSK9emGP7Q5LdWYRY5hLLoHv';
         if(registrationForm) {
           const res = await axios.get("https://gateway.pinata.cloud/ipfs/" + registrationForm, {
             responseType: "blob",
