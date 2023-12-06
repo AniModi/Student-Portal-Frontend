@@ -30,7 +30,7 @@ const VerifyStudentFees = () => {
       }
     }
     fetchData();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleApprove = async (type) => {
     try {
