@@ -1,5 +1,3 @@
-const ethers = require("ethers")
-
 const contractAddress = '0xC4c2979bE725FAcEaE9b56A296d5B6CD83cD4ed4';
 
 const contractAbi = [
@@ -492,32 +490,3 @@ const contractAbi = [
         "type": "function"
     }
 ];
-
-
-async function mintNFT(resultURI, toAddress) {
-
-    console.log("Inside mintNFT function");
-
-    if (typeof window.ethereum !== 'undefined') {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        console.log(signer);
-        const contract = new ethers.Contract(contractAddress, contractAbi, signer);
-
-        console.log('Minting NFT...');
-
-        try {
-            const tx = await contract.mint(toAddress, resultURI);
-            await tx.wait();
-
-            console.log('NFT minted successfully!');
-        } catch (error) {
-            console.error('Error minting NFT:', error);
-        }
-    }
-    else {
-        console.log("Metamask not installed");
-    }
-}
-
-export { mintNFT };

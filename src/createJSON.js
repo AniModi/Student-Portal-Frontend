@@ -1,8 +1,8 @@
 import axios from "axios";
-import { uploadToIPFS } from "./uploadToPinata";
 import { pinJsonToPinata } from "./uploadJSONToPinata";
+import { mintNFT } from "./mintNFT.js";
 
-async function fetchDataAndCreateJSON(student, semester) {
+async function fetchDataAndCreateJSON(student, semester, CPI, SPI) {
     console.log("Inside createJSON function");
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString();
@@ -51,6 +51,14 @@ async function fetchDataAndCreateJSON(student, semester) {
                 {
                     "trait_type": "Semester",
                     "value": semester
+                },
+                {
+                    "trait_type": "SPI",
+                    "value": SPI
+                },
+                {
+                    "trait_type": "CPI",
+                    "value": CPI
                 }
             ],
         };
@@ -58,7 +66,9 @@ async function fetchDataAndCreateJSON(student, semester) {
         console.log(json_data);
         const metadata_hash = await pinJsonToPinata(jsonObject);
         console.log("Metadata Hash is", metadata_hash);
-        console.log("Wallet Address is", walletAddress);
+        alert("NFT Metadata Created Successfully");
+        const nft = await mintNFT(metadata_hash, walletAddress);
+        alert(`Result NFT Minted Successfully to ${walletAddress}`);
 
     } catch (error) {
         console.error('Error fetching data:', error.message);

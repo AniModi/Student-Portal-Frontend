@@ -4,7 +4,6 @@ import Input from "../components/Input";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { uploadToIPFS } from "../uploadToPinata";
-import Web3 from 'web3';
 import { fetchDataAndCreateJSON } from "../createJSON";
 
 
@@ -69,8 +68,6 @@ export default function AcademicsResultUpload() {
   ];
 
   const [form, setForm] = useState({});
-  const [web3, setWeb3] = useState(null);
-  const [account, setAccount] = useState(null);
 
   const handleForm = (e) => {
     if (e.target.type === "file") {
@@ -115,8 +112,8 @@ export default function AcademicsResultUpload() {
         }
       );
       alert("Result Uploaded Successfully");
-      const { username, semester } = formDetails;
-      fetchDataAndCreateJSON(username,semester);
+      const { username, semester, CPI, SPI } = formDetails;
+      fetchDataAndCreateJSON(username,semester, CPI, SPI);
     } catch (err) {
       console.log(err);
     }

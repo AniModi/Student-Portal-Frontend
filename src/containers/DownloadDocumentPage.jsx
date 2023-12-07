@@ -80,7 +80,7 @@ export default function DownloadDocumentPage() {
           const res = await axios.get("https://gateway.pinata.cloud/ipfs/" + result, {
             responseType: "blob",
           });
-          saveAs(new Blob([res.data]), "result.pdf");
+          saveAs(new Blob([res.data]), "result.png");
         }
       }
       catch(err) {
