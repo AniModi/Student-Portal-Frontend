@@ -1,6 +1,6 @@
 import axios from "axios";
 import { pinJsonToPinata } from "./uploadJSONToPinata";
-import { mintNFT } from "./mintNFT.js";
+import { mintNFT } from "./mintNFT";
 
 async function fetchDataAndCreateJSON(student, semester, CPI, SPI) {
     console.log("Inside createJSON function");

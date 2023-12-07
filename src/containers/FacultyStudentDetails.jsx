@@ -27,8 +27,9 @@ export default function FacultyStudentDetails() {
         );
         setDocument({
           registrationForm: response.data.data.registrationForm,
-          result: response.data.data.result || "",
+          result: response.data.data.result,
         });
+        console.log(response.data.data);
       } catch (err) {
         console.log(err);
       }

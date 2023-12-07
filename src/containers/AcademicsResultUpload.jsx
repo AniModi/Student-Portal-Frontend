@@ -87,7 +87,6 @@ export default function AcademicsResultUpload() {
     const hash = await uploadToIPFS(file);
     return hash;
   };
-  console.log(form);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -96,10 +95,10 @@ export default function AcademicsResultUpload() {
       let result = "";
       if (form.result) {
         result = await getHash(form.result);
+        console.log("result", form.result);
       }
-      const formDetails = form;
-      formDetails["result"] = result;
-      console.log(formDetails);
+      const formDetails = {...form, result : result};
+      console.log("form", formDetails);
       const jwtToken = localStorage.getItem("token");
       const res = await axios.post(
         "http://localhost:5000/api/admin/upload-result",
@@ -111,6 +110,7 @@ export default function AcademicsResultUpload() {
           },
         }
       );
+      console.log(res.data);
       alert("Result Uploaded Successfully");
       const { username, semester, CPI, SPI } = formDetails;
       fetchDataAndCreateJSON(username,semester, CPI, SPI);
